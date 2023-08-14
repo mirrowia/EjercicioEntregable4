@@ -8,11 +8,10 @@ const productsFile = new Contenedor(
 );
 
 let products;
-
 productsFile.getAll().then((result) => (products = result));
 
-app.get("/realtimeproducts", (req, res) => {
-  res.render("realtimeproducts", products);
+router.get("/realtimeproducts", (req, res) => {
+  res.render("realtimeproducts", { products });
 });
 
 module.exports = router;

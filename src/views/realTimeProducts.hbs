@@ -4,35 +4,59 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <title>Document</title>
 </head>
 <body>
-    <form action="">
-        <h2>Add Products</h2>
-        <label for="title">Title:</label>
-        <input id="title" type="text" name="title" />
-        <br><br>
-        <label for="description">Description:</label>
-        <input id="description" type="text" name="description" />
-        <br><br>
-        <label for="code">Code:</label>
-        <input id="code" type="text" name="code" />
-        <br><br>
-        <label for="price">Price:</label>
-        <input id="price" type="text" name="price" />
-        <br><br>
-        <label for="status">Status:</label>
-        <input id="status" type="text" name="status" />
-        <br><br>
-        <label for="stock">Stock:</label>
-        <input id="stock" type="text" name="stock" />
-        <br><br>
-        <label for="category">Category:</label>
-        <input id="category" type="text" name="category" />
-        <br><br>
-        <button id="btnAdd" onclick="addProduct()" value="Add"> ADD </button>
-    </form>
+    <div class="d-flex">
+        <div id="productList" class="px-3">
+            <h1>Products</h1>
+            {{#each products}}
+            <div id={{this.id}} class="border-bottom border-secondary mb-4">
+                <h2 class="text-warning">{{this.title}}</h2>
+                <p class="fw-medium">{{this.description}}</p>
+                <p>ID: {{this.id}}</p>
+                <p>CODE: {{this.code}}</p>
+                <p>PRICE: {{this.price}}</p>
+                <p>STATUS: {{this.status}}</p>
+                <p>STOCK: {{this.stock}}</p>
+                <p>CATEGORY: {{this.category}}</p>
+            </div>
+            {{/each}}
+        </div>
+        <div class="border-start border-secondary ps-3 me-5">
+            <h2>Add Products</h2>
+            <label for="title">Title:</label>
+            <input id="title" type="text" name="title" />
+            <br><br>
+            <label for="description">Description:</label>
+            <input id="description" type="text" name="description" />
+            <br><br>
+            <label for="code">Code:</label>
+            <input id="code" type="text" name="code" />
+            <br><br>
+            <label for="price">Price:</label>
+            <input id="price" type="text" name="price" />
+            <br><br>
+            <label for="status">Status:</label>
+            <input id="status" type="text" name="status" />
+            <br><br>
+            <label for="stock">Stock:</label>
+            <input id="stock" type="text" name="stock" />
+            <br><br>
+            <label for="category">Category:</label>
+            <input id="category" type="text" name="category" />
+            <br><br>
+            <button id="btnAdd" onclick="addProduct()" value="Add"> ADD </button>
 
+            <h2 class="mt-5 border-top border-secondary">Delete Product</h2>
+            <label for="productId">Product ID:</label>
+            <input id="productId" type="text" name="productId" />
+            <br><br>
+            <button id="btnRemove" onclick="removeProduct()" value="Remove"> Remove </button>
+        </div>
+    </div>
+    
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
@@ -49,22 +73,57 @@
             stock : document.getElementById("stock").value,
             category : document.getElementById("category").value
             }
-        socket.emit("add", JSON.stringify(product))
+            const productList = document.getElementById("productList");
+            const productDiv = document.createElement("div")
+            productDiv.classList.add("border-bottom", "border-secondary", "mb-4")
+            productList.appendChild(productDiv)
+
+            const productTitle = document.createElement("h2")
+            productTitle.classList.add("text-warning")
+            productTitle.textContent = `${document.getElementById("title").value}`
+            productDiv.appendChild(productTitle)
+
+            const productDescription = document.createElement("p")
+            productDescription.classList.add("fw-medium")
+            productDescription.textContent = `DESCRIPTION: ${document.getElementById("description").value}`
+            productDiv.appendChild(productDescription)
+
+            const productCode = document.createElement("p")
+            productCode.textContent = `CODE: ${document.getElementById("code").value}`
+            productDiv.appendChild(productCode)
+
+            const productPrice = document.createElement("p")
+            productPrice.textContent = `PRICE: ${document.getElementById("price").value}`
+            productDiv.appendChild(productPrice)
+
+            const productStatus = document.createElement("p")
+            productStatus.textContent = `STATUS: ${document.getElementById("status").value}`
+            productDiv.appendChild(productStatus)
+
+            const productStock = document.createElement("p")
+            productStock.textContent = `STOCK: ${document.getElementById("stock").value}`
+            productDiv.appendChild(productStock)
+
+            const productCategory = document.createElement("p")
+            productCategory.textContent = `CATEGORY: ${document.getElementById("category").value}`
+            productDiv.appendChild(productCategory)
+        socket.emit("add", product)
+        }
+
+        function removeProduct() {
+            const id= parseInt(document.getElementById("productId").value)
+            const productById = document.getElementById(id)
+            productById.remove()
+            socket.emit("del", id)
         }
 
         socket.on("add",  (data)=>{
-            console.log(`Producto recibido desde el servidor: ${product}`)
+            console.log(`Producto recibido desde el servidor: ${JSON.stringify(product)}`)
         })
 
-        
-
         const btnAdd = document.getElementById("btnAdd")
-
         btnAdd.addEventListener("click", ()=>{
-        } )
-
-        
-        
+        })
     </script>
     
 </body>
