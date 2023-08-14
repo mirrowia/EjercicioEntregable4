@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="">
+        <h2>Add Products</h2>
+        <label for="title">Title:</label>
+        <input id="title" type="text" name="title" />
+        <br><br>
+        <label for="description">Description:</label>
+        <input id="description" type="text" name="description" />
+        <br><br>
+        <label for="code">Code:</label>
+        <input id="code" type="text" name="code" />
+        <br><br>
+        <label for="price">Price:</label>
+        <input id="price" type="text" name="price" />
+        <br><br>
+        <label for="status">Status:</label>
+        <input id="status" type="text" name="status" />
+        <br><br>
+        <label for="stock">Stock:</label>
+        <input id="stock" type="text" name="stock" />
+        <br><br>
+        <label for="category">Category:</label>
+        <input id="category" type="text" name="category" />
+        <br><br>
+        <button id="btnAdd" onclick="addProduct()" value="Add"> ADD </button>
+    </form>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        let product;
+
+        function addProduct() {
+        product = {
+            title: document.getElementById("title").value,
+            description : document.getElementById("description").value,
+            code : document.getElementById("code").value,
+            price : document.getElementById("price").value,
+            status : document.getElementById("status").value,
+            stock : document.getElementById("stock").value,
+            category : document.getElementById("category").value
+            }
+        socket.emit("add", JSON.stringify(product))
+        }
+
+        socket.on("add",  (data)=>{
+            console.log(`Producto recibido desde el servidor: ${product}`)
+        })
+
+        
+
+        const btnAdd = document.getElementById("btnAdd")
+
+        btnAdd.addEventListener("click", ()=>{
+        } )
+
+        
+        
+    </script>
+    
+</body>
+</html>

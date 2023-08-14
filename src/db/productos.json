@@ -1,0 +1,29 @@
+[
+  {
+    "title": "Total War: WARHAMMER III",
+    "description": "The cataclysmic conclusion to the Total War: WARHAMMER trilogy is here. Rally your forces and step into the Realm of Chaos, a dimension of mind-bending horror where the very fate of the world will be decided. Will you conquer your Daemons… or command them?",
+    "code": "1142710",
+    "price": 59.99,
+    "status": true,
+    "stock": 10,
+    "category": "Estrategia"
+  },
+  {
+    "title": "Monster Hunter: World",
+    "description": "Welcome to a new world! In Monster Hunter: World, the latest installment in the series, you can enjoy the ultimate hunting experience, using everything at your disposal to hunt monsters in a new world teeming with surprises and excitement.",
+    "code": "582010",
+    "price": 29.99,
+    "status": true,
+    "stock": 2,
+    "category": "Accion"
+  },
+  {
+    "title": "Sonic Frontiers",
+    "description": "Experience Sonic like never before!",
+    "code": "1237320",
+    "price": 59.99,
+    "status": true,
+    "stock": 23,
+    "category": "Aventura"
+  }
+]
