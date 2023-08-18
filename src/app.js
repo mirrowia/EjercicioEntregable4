@@ -7,6 +7,7 @@ const realTimeProductsRouter = require("./routes/realTimeProducts.router");
 const http = require("http").createServer(app);
 const io = require("socket.io")(http);
 const Contenedor = require("./Contenedor.js");
+const { log } = require("console");
 
 const productsFile = new Contenedor(path.join(__dirname, "db/productos.json"));
 let products;
@@ -29,17 +30,19 @@ io.on("connection", (socket) => {
   socket.emit("producs", products);
 
   //Evento agregar producto
-  socket.on("add", (data) => {
-    productsFile.save(data);
-    console.log(`Product agregado: ${data}`);
-    io.emit("add", data);
+  socket.on("addProduct", (data) => {
+    productsFile.save(data).then(() => {
+      productsFile.getAll().then((result) => {
+        var product = result.filter((obj) => obj.code == data.code);
+        io.sockets.emit("addProduct", product[0]);
+      });
+    });
   });
 
-  socket.on("del", (id) => {
-    productsFile.deleteById(id);
-
-    console.log(`Product con id ${id} eliminado`);
-    io.emit("del", id);
+  socket.on("removeProduct", (data) => {
+    productsFile.deleteById(data);
+    console.log(`Product con id ${data} eliminado`);
+    io.emit("removeProduct", data);
   });
 
   socket.on("disconnect", () => {

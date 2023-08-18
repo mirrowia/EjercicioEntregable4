@@ -64,65 +64,80 @@
         let product;
 
         function addProduct() {
+        
+        let title = document.getElementById("title").value;
+        let description = document.getElementById("description").value;
+        let code = document.getElementById("code").value;
+        let price = document.getElementById("price").value;
+        let status = document.getElementById("status").value;
+        let stock = document.getElementById("stock").value;
+        let category = document.getElementById("category").value;
+        
         product = {
-            title: document.getElementById("title").value,
-            description : document.getElementById("description").value,
-            code : document.getElementById("code").value,
-            price : document.getElementById("price").value,
-            status : document.getElementById("status").value,
-            stock : document.getElementById("stock").value,
-            category : document.getElementById("category").value
+            title: title,
+            description : description,
+            code : code,
+            price : price,
+            status : status,
+            stock : stock,
+            category : category
             }
+
+        socket.emit("addProduct", product)
+        }
+
+        function removeProduct() {
+            const id= parseInt(document.getElementById("productId").value)
+            socket.emit("removeProduct", id)
+        }
+
+        socket.on("addProduct",  (data)=>{
+            console.log(`Producto recibido desde el servidor: ${JSON.stringify(data)}`)
+
             const productList = document.getElementById("productList");
             const productDiv = document.createElement("div")
+            productDiv.setAttribute("id", data.id)
             productDiv.classList.add("border-bottom", "border-secondary", "mb-4")
             productList.appendChild(productDiv)
 
             const productTitle = document.createElement("h2")
             productTitle.classList.add("text-warning")
-            productTitle.textContent = `${document.getElementById("title").value}`
+            productTitle.textContent = `${data.title}`
             productDiv.appendChild(productTitle)
 
             const productDescription = document.createElement("p")
             productDescription.classList.add("fw-medium")
-            productDescription.textContent = `DESCRIPTION: ${document.getElementById("description").value}`
+            productDescription.textContent = `${data.description}`
             productDiv.appendChild(productDescription)
 
+            const productId = document.createElement("p")
+            productId.textContent = `ID: ${data.id}`
+            productDiv.appendChild(productId)
+
             const productCode = document.createElement("p")
-            productCode.textContent = `CODE: ${document.getElementById("code").value}`
+            productCode.textContent = `CODE: ${data.code}`
             productDiv.appendChild(productCode)
 
             const productPrice = document.createElement("p")
-            productPrice.textContent = `PRICE: ${document.getElementById("price").value}`
+            productPrice.textContent = `PRICE: ${data.price}`
             productDiv.appendChild(productPrice)
 
             const productStatus = document.createElement("p")
-            productStatus.textContent = `STATUS: ${document.getElementById("status").value}`
+            productStatus.textContent = `STATUS: ${data.status}`
             productDiv.appendChild(productStatus)
 
             const productStock = document.createElement("p")
-            productStock.textContent = `STOCK: ${document.getElementById("stock").value}`
+            productStock.textContent = `STOCK: ${data.stock}`
             productDiv.appendChild(productStock)
 
             const productCategory = document.createElement("p")
-            productCategory.textContent = `CATEGORY: ${document.getElementById("category").value}`
+            productCategory.textContent = `CATEGORY: ${data.category}`
             productDiv.appendChild(productCategory)
-        socket.emit("add", product)
-        }
-
-        function removeProduct() {
-            const id= parseInt(document.getElementById("productId").value)
-            const productById = document.getElementById(id)
-            productById.remove()
-            socket.emit("del", id)
-        }
-
-        socket.on("add",  (data)=>{
-            console.log(`Producto recibido desde el servidor: ${JSON.stringify(product)}`)
         })
 
-        const btnAdd = document.getElementById("btnAdd")
-        btnAdd.addEventListener("click", ()=>{
+        socket.on("removeProduct", (data)=>{
+            const productById = document.getElementById(data)
+            productById.remove()
         })
     </script>
     
